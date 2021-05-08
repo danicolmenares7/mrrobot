@@ -3,7 +3,7 @@
   $page_title = 'Admin página de inicio';
   require_once('includes/load.php');
   // Checkin What level user has permission to view this page
-   page_require_level(3);
+	page_require_level(3);
 
 if(isset($_GET['id'])){
 	$id=$_GET['id'];
@@ -297,151 +297,115 @@ $id=$rw['last']+1;
 				<!--fin del formulario-->
 			
 			<div class="taco-mPrincipal4 taco-green" >
-            
-               
-                
-			<div class="container-fluid "> 
-				<div class="table-responsive"   style="height: 100%;border: 0px">
-			  <table class="table"  id="example" border="0" style="font-size: 12px;background-color:white;font-weight: bold">
-			  	<thead>
-				<tr style="background-color: #4F4F4F;color:white">
-                
-                <th> Correlativo</th>
-                <th> DNI</th>
-                <th class="text-center" style="width: 10%;">Nombre </th>
-                <th class="text-center" style="width: 5%;"> Telefono </th>
-                <th class="text-center" style="width: 5%;"> Direccion </th>
-                <th class="text-center" style="width: 50%;"> Equipo </th>
-				  <th class="text-center" style="width: 5%;"> Falla </th>
-				   <th class="text-center" style="width: 5%;"> Status </th>
-                <th class="text-center" style="width: 5%;"> Fecha </th>
-				<th class="text-center" style="width: 10%;"> Costo por revision</th>
-					<th class="text-center" style="width: 10%;"> Total</th>
-                
-              </tr>
-          </thead>
-      </tbody>
-				<?php
-				$sql="select * from registro as r inner join cliente as c on r.id_cliente_registro=c.id_cliente  ORDER BY r.correlativo DESC ";
+				<div class="container-fluid "> 
+					<div class="table-responsive"   style="height: 100%;border: 0px">
+						<table class="table"  id="example" border="0" style="font-size: 12px;background-color:white;font-weight: bold">
+							<thead>
+								<tr style="background-color: #4F4F4F;color:white">
+									<th> Correlativo</th>
+									<th> DNI</th>
+									<th class="text-center" style="width: 10%;">Nombre </th>
+									<th class="text-center" style="width: 5%;"> Telefono </th>
+									<th class="text-center" style="width: 5%;"> Direccion </th>
+									<th class="text-center" style="width: 50%;"> Equipo </th>
+									<th class="text-center" style="width: 5%;"> Falla </th>
+									<th class="text-center" style="width: 5%;"> Status </th>
+									<th class="text-center" style="width: 5%;"> Fecha </th>
+									<th class="text-center" style="width: 10%;"> Costo por revision</th>
+									<th class="text-center" style="width: 10%;"> Total</th>
+								</tr>
+							</thead>
+							</tbody>
+								<?php
+									$registros = registrosBySucursal();
 
-		if ($query=$db->query($sql) ){
-			$fecha_hoy=date('Y-m-d');
-			
-			
-				while ($row=$db->fetch_array($query)){
-					$correlativo=$row['correlativo'];
-					$dni=$row['dni_cliente'];
-					$nombre=$row['nombre_cliente'];
-					$telefono=$row['telefono_cliente'];
-					$descripcion=$row['descrip'];
-					$revision=$row['costo_por_revision'];
-					
-					$falla=$row['falla'];
-					$status=$row['status'];
-					if($status==0){
-						$status_value="Anulado";
+									$fecha_hoy=date('Y-m-d');
+									foreach ($registros as $row){
+										$correlativo=$row['correlativo'];
+										$dni=$row['dni_cliente'];
+										$nombre=$row['nombre_cliente'];
+										$telefono=$row['telefono_cliente'];
+										$descripcion=$row['descrip'];
+										$revision=$row['costo_por_revision'];
+										
+										$falla=$row['falla'];
+										$status=$row['status'];
+										if($status==0){
+											$status_value="Anulado";
+										}
+										elseif($status==1){
+											$status_value="REPARACION O MANTENIMIENTO";
+										}
+										elseif($status==2){
+											$status_value="LISTO PARA ENTREGAR";
+										}
+										elseif($status==3){
+											$status_value="ENTREGADO";
+										}
+										
+										$direccion=$row['direccion_cliente'];
+										$fecha=$row['fecha'];
+										$total=$row['costo_total_trabajo'];
+										
+										echo '<tr>';
+										echo "<td class=\"text-center\"><a href=\"mPrincipal.php?id=".(int)$correlativo.">".$correlativo."</a></td>";
+										echo "<td>".remove_junk($dni)."</td>";
+										echo "<td class=\"text-center\">".remove_junk($nombre)."</td>";	
+										echo "<td class=\"text-center\">".remove_junk($telefono)."</td>";	
+										echo "<td class=\"text-center\">".remove_junk($direccion)."</td>";
+										echo "<td class=\"text-center\" style=\"width: 50%;\">".remove_junk($descripcion)."</td>";
+										echo "<td class=\"text-center\">".remove_junk($falla)."</td>";	
+										echo "<td class=\"text-center\">".remove_junk($status_value)."</td>";
+										echo "<td class=\"text-center\">".read_date($fecha)."</td>";
+										echo "<td class=\"text-center\">".$revision."</td>";
+										echo "<td class=\"text-center\">".$total."</td>";
+										echo "</tr>";
+									
+									}
+									
+								?>
+							</tbody>
+						</table>
+					</div>
+				</div>
+    		</div>
+		</div>
+    	<?php include ("./layouts/footer.php");?>
+
+		<script type="text/javascript" src="js/VentanaCentrada.js"></script>
+		<script type="text/javascript" src="js/nueva_factura.js"></script>
+		<script>
+			$(document).ready(function() {
+
+				$('#nombre_cliente').autocomplete({
+					source: function(request, response){
+						$.ajax({
+							url:"./ajax/autocomplete/clientes.php",
+							dataType:"json",
+							data:{q:request.term},
+							success: function(data){
+								response(data);
+							}
+
+						});
+					},
+					minLength: 1,
+					select: function(event,ui){
+						event.preventDefault();
+										$('#id_cliente').val(ui.item.id_cliente);
+										$('#nombre_cliente').val(ui.item.nombre_cliente);
+										$('#telefono').val(ui.item.telefono_cliente);
+										$('#email').val(ui.item.email_cliente);
+										$('#dni').val(ui.item.dni_cliente);
+										$('#direccion').val(ui.item.direccion_cliente);
+																		
+				
 					}
-					elseif($status==1){
-						$status_value="REPARACION O MANTENIMIENTO";
-					}
-					elseif($status==2){
-						$status_value="LISTO PARA ENTREGAR";
-					}
-					elseif($status==3){
-						$status_value="ENTREGADO";
-					}
-					
-					$direccion=$row['direccion_cliente'];
-					$fecha=$row['fecha'];
-					$total=$row['costo_total_trabajo'];
-					?>
-					<tr>
-                <td class="text-center"><a href="mPrincipal.php?id=<?php echo (int)$correlativo;?>"><?php echo $correlativo;?></a></td>
-               
-                <td><?php echo remove_junk($dni); ?></td>
-                <td class="text-center"> <?php echo remove_junk($nombre); ?></td>
-                <td class="text-center"> <?php echo remove_junk($telefono); ?></td>
-                <td class="text-center"> <?php echo remove_junk($direccion); ?></td>
-                <td class="text-center" style="width: 50%;"> <?php echo remove_junk($descripcion); ?></td>
-				<td class="text-center"> <?php echo remove_junk($falla); ?></td>
-				<td class="text-center"> <?php echo remove_junk($status_value); ?></td> 
-				<td class="text-center"> <?php echo read_date($fecha); ?></td>  
-		        <td class="text-center"> <?php echo $revision; ?></td>
-				 <td class="text-center"> <?php echo $total; ?></td>
-              
-              </tr>
-					<?php
-				}
-				}
-				?>
-			</tbody>
-			</table>
-			
-			</div>
-			
-		
-        
-        </div>
-
-    </div>
-
-
-
-</div>
-
-   
-
-
- 
-    
-
-	
- 
- 
-   
-    <?php include ("./layouts/footer.php");?>
-		
-
-<script type="text/javascript" src="js/VentanaCentrada.js"></script>
-<script type="text/javascript" src="js/nueva_factura.js"></script>
-
-		
-		 
-   
-<script>
-	$(document).ready(function() {
-
-		$('#nombre_cliente').autocomplete({
-			source: function(request, response){
-				$.ajax({
-					url:"./ajax/autocomplete/clientes.php",
-					dataType:"json",
-					data:{q:request.term},
-					success: function(data){
-						response(data);
-					}
-
 				});
-			},
-			minLength: 1,
-			select: function(event,ui){
-				event.preventDefault();
-								$('#id_cliente').val(ui.item.id_cliente);
-								$('#nombre_cliente').val(ui.item.nombre_cliente);
-								$('#telefono').val(ui.item.telefono_cliente);
-								$('#email').val(ui.item.email_cliente);
-								$('#dni').val(ui.item.dni_cliente);
-								$('#direccion').val(ui.item.direccion_cliente);
-																
-          
-			}
-		});
-	
+			
 
-	});
-	
-					
-	
-	</script>		
+			});
+		</script>		
 
-</body></html>
+	</body>
+</html>

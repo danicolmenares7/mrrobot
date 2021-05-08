@@ -4,7 +4,7 @@
   // Checkear nivel de permiso para esta pagina
   page_require_level(1);
   $all_categories = find_all('categories');
-  $all_sucursales=find_all('sucursales');
+  $all_sucursales=find_all_sucursales_by_user();
   $all_providers= find_all('proveedor');
   $all_photo = find_all('media');
  $products = join_product_table();
