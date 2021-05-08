@@ -300,11 +300,10 @@ $id=$rw['last']+1;
 				<div class="container-fluid "> 
 					<div class="table-responsive"   style="height: 100%;border: 0px">
 						<table class="table"  id="example" border="0" style="font-size: 12px;background-color:white;font-weight: bold">
-							<thead>
-								<tr style="background-color: #4F4F4F;color:white">
-									<th> Correlativo</th>
-									<th> DNI</th>
-									<th class="text-center" style="width: 10%;">Nombre </th>
+							<thead style="background-color: #4F4F4F;color:white">
+									<th  class="text-center" style="width: 5%;"> Correlativo</th>
+									<th  class="text-center" style="width: 5%; "> DNI</th>
+									<th class="text-center" style="width: 5%;">Nombre </th>
 									<th class="text-center" style="width: 5%;"> Telefono </th>
 									<th class="text-center" style="width: 5%;"> Direccion </th>
 									<th class="text-center" style="width: 50%;"> Equipo </th>
@@ -313,7 +312,6 @@ $id=$rw['last']+1;
 									<th class="text-center" style="width: 5%;"> Fecha </th>
 									<th class="text-center" style="width: 10%;"> Costo por revision</th>
 									<th class="text-center" style="width: 10%;"> Total</th>
-								</tr>
 							</thead>
 							</tbody>
 								<?php
@@ -347,8 +345,8 @@ $id=$rw['last']+1;
 										$fecha=$row['fecha'];
 										$total=$row['costo_total_trabajo'];
 										
-										echo '<tr>';
-										echo "<td class=\"text-center\"><a href=\"mPrincipal.php?id=".(int)$correlativo.">".$correlativo."</a></td>";
+										echo "<tr>";
+										echo "<td class=\"text-center\"><a href='mPrincipal.php?id=".(int)$correlativo."'>".$correlativo."</a></td>";
 										echo "<td>".remove_junk($dni)."</td>";
 										echo "<td class=\"text-center\">".remove_junk($nombre)."</td>";	
 										echo "<td class=\"text-center\">".remove_junk($telefono)."</td>";	
