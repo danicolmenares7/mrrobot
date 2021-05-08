@@ -88,9 +88,6 @@ $fecha_factura=$datos_factura['fecha_factura'];
 				<br>CEL: <?php echo $telefono_sucursal;?>
 				
 				 <br>EMAIL: <?php echo $email_sucursal;?>
-				 <br><img style="width: 6%;height: 4%" src="libs/images/wsp-icon.png" alt="Logo">
-				 <?php echo $wsp_sucursal;?>
-                
             </td>
 			<td style="width: 25%;text-align:right">
 			COMPROBANTE Nº <?php echo $numero_factura;?>
