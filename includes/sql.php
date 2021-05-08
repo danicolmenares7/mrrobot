@@ -725,70 +725,78 @@ function find_all_sucursales_by_user(){
     return find_by_sql($sql);
 }
 
-function inventarioAgotado(){
-  global $db;
-  $id_sucursal=$_SESSION['id_sucursal'];
-  $sql = "select m.file_name,p.quantity,p.id,p.date,p.codigo_producto,p.name as nombre_prod,p.buy_price,p.sale_price,p.media_id,p.categorie_id,p.id_sucursal,c.name as nombre_suc,s.nombre_sucursal 
-    from products as p 
-    inner join categories as c ON p.categorie_id=c.id 
-    inner join sucursales as s ON p.id_sucursal=s.id
-    left join media as m ON m.id = p.media_id 
-    where p.id_sucursal=$id_sucursal 
-    and p.quantity <= 0 
-    ORDER BY p.id";
-  $productos = find_by_sql($sql);
-  return $productos;
+  function inventarioAgotado(){
+    global $db;
+    $id_sucursal=$_SESSION['id_sucursal'];
+    $sql = "select m.file_name,p.quantity,p.id,p.date,p.codigo_producto,p.name as nombre_prod,p.buy_price,p.sale_price,p.media_id,p.categorie_id,p.id_sucursal,c.name as nombre_suc,s.nombre_sucursal 
+      from products as p 
+      inner join categories as c ON p.categorie_id=c.id 
+      inner join sucursales as s ON p.id_sucursal=s.id
+      left join media as m ON m.id = p.media_id 
+      where p.id_sucursal=$id_sucursal 
+      and p.quantity <= 0 
+      ORDER BY p.id";
+    $productos = find_by_sql($sql);
+    return $productos;
 
-}
-function valorTotalCompra(){
-  global $db;
-  $id_sucursal=$_SESSION['id_sucursal'];
-  $sql = "SELECT SUM(p.quantity*p.buy_price) as total_compra 
-    from products as p where p.id_sucursal = {$id_sucursal} and p.quantity > 0";
-  $datos_generales = find_by_sql($sql);
-  return $datos_generales[0]['total_compra'];
-
-}
-
-function listaProductosVigentes(){
-  global $db;
-  $id_sucursal=$_SESSION['id_sucursal'];
-  $sql = "select p.categorie_id as cat, p.name as nombre
-    from products as p 
-    inner join sucursales as s ON p.id_sucursal=s.id
-    where p.id_sucursal=$id_sucursal and p.quantity > 0 ORDER BY p.id";
-
-  $productos = find_by_sql($sql);
-  $sql_cat = "SELECT * FROM categories";
-
-  $categorias = find_by_sql($sql_cat);
-
-  foreach($categorias as $clave => $valor){
-    $categorias[$clave]['productos'] = [];
   }
-  foreach ($productos as $valor) {
-    $key = array_search($valor['cat'], array_column($categorias,'id'));
-    if(($key)||($key===0)){
-      array_push($categorias[$key]['productos'],$valor['nombre']);
+  function valorTotalCompra(){
+    global $db;
+    $id_sucursal=$_SESSION['id_sucursal'];
+    $sql = "SELECT SUM(p.quantity*p.buy_price) as total_compra 
+      from products as p where p.id_sucursal = {$id_sucursal} and p.quantity > 0";
+    $datos_generales = find_by_sql($sql);
+    return $datos_generales[0]['total_compra'];
+
+  }
+
+  function listaProductosVigentes(){
+    global $db;
+    $id_sucursal=$_SESSION['id_sucursal'];
+    $sql = "select p.categorie_id as cat, p.name as nombre
+      from products as p 
+      inner join sucursales as s ON p.id_sucursal=s.id
+      where p.id_sucursal=$id_sucursal and p.quantity > 0 ORDER BY p.id";
+
+    $productos = find_by_sql($sql);
+    $sql_cat = "SELECT * FROM categories";
+
+    $categorias = find_by_sql($sql_cat);
+
+    foreach($categorias as $clave => $valor){
+      $categorias[$clave]['productos'] = [];
     }
-   
-  }
-  foreach ($categorias as $key => $value) {
-    if(count($value['productos']) === 0){
-      unset($categorias[$key]);
+    foreach ($productos as $valor) {
+      $key = array_search($valor['cat'], array_column($categorias,'id'));
+      if(($key)||($key===0)){
+        array_push($categorias[$key]['productos'],$valor['nombre']);
+      }
+    
     }
+    foreach ($categorias as $key => $value) {
+      if(count($value['productos']) === 0){
+        unset($categorias[$key]);
+      }
+    }
+    return $categorias;
+
   }
-  return $categorias;
 
-}
+  function cajaActual(){
+    global $db;
+    $id_sucursal=$_SESSION['id_sucursal'];
+    $sql = "SELECT SUM(p.quantity*p.buy_price) as total_compra 
+      from products as p where p.id_sucursal = {$id_sucursal}";
+    $datos_generales = find_by_sql($sql);
+    return $datos_generales[0]['total_compra'];
 
-function cajaActual(){
-  global $db;
-  $id_sucursal=$_SESSION['id_sucursal'];
-  $sql = "SELECT SUM(p.quantity*p.buy_price) as total_compra 
-    from products as p where p.id_sucursal = {$id_sucursal}";
-  $datos_generales = find_by_sql($sql);
-  return $datos_generales[0]['total_compra'];
+  }
+  function registrosBySucursal(){
+    global $db;
+    $id_sucursal=$_SESSION['id_sucursal'];
+    $sql="select * from registro as r inner join cliente as c on r.id_cliente_registro=c.id_cliente  WHERE id_sucursal_registro = {$id_sucursal} ORDER BY r.correlativo DESC ";
+    $registros = find_by_sql($sql);
+    return $registros;
 
-}
+  }
 ?>
