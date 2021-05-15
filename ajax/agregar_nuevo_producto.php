@@ -2,7 +2,7 @@
 require_once('../includes/load.php');
 
   // Checkear nivel de permiso para esta pagina
-  page_require_level(1);
+  page_require_level(2);
 $products = join_product_table();
 if(isset($_POST['categoria'])){
    // si no hay errores

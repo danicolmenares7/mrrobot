@@ -4,7 +4,7 @@ $page_title = 'Nueva factura';
   require_once('includes/load.php');
 
   // Chequear el nivel del usuario
-   page_require_level(1);
+   page_require_level(2);
   $all_sucursal= find_all('sucursales');
  
 	?>

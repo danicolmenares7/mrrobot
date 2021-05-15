@@ -2,7 +2,7 @@
   $page_title = 'Lista de categorías';
   require_once('includes/load.php');
   // Checkin What level user has permission to view this page (1=Admin , 2= special user, 3=user)
-  page_require_level(1);
+  page_require_level(2);
   
   $all_categories = find_all('categories')
 ?>

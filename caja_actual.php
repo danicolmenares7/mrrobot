@@ -1,7 +1,7 @@
 <?php 
     $page_title="Caja Actual";
     require_once('includes/load.php');
-    page_require_level(3);
+    page_require_level(1);
 
     $fecha_hoy=date('Y-m-d');
     $montos = cajaActual();

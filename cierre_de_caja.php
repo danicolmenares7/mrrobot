@@ -75,10 +75,11 @@ include_once('layouts/header.php');
 $fecha_hoy=date('Y-m-d');
 $horai="00:00:00";
 $horaf="23:59:59";
+$id_sucursal = $_SESSION['id_sucursal'];
 //echo "<h1>Cierre de caja diario $fecha_hoy<h1>";
 $consulta="SELECT * FROM sales 
 INNER JOIN products ON sales.product_id=products.id 
-WHERE sales.date BETWEEN '$fecha_hoy $horai' AND '$fecha_hoy $horaf'";
+WHERE sales.date BETWEEN '$fecha_hoy $horai' AND '$fecha_hoy $horaf' and sales.id_sucursal = '$id_sucursal'";
 $resultado=$db->query($consulta); 
 $nro=1;
 $sumaprecio=0;//total declarado antes del bucle

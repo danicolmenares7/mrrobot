@@ -1,25 +1,26 @@
 <?php 
 $page_title="Reporte diario";
 require_once('includes/load.php');
-page_require_level(3);
+page_require_level(2);
 
+$id_sucursal = $_SESSION['id_sucursal'];
 $fecha_hoy=date('Y-m-d');
 //suma de pagos de guias
-$sql="SELECT * FROM pagos_registro where fecha_pago like '$fecha_hoy%'";
+$sql="SELECT * FROM pagos_registro where sucursal_id = '".$id_sucursal."' and fecha_pago like '$fecha_hoy%'";
 $data=$db->query($sql);
 $suma=0;
 foreach($data as $datos){
 	$suma += (double)$datos['pagado'];
 }
 //suma de pagos de ventas
-$sql="SELECT * FROM sales where date like '$fecha_hoy%'";
+$sql="SELECT * FROM sales where id_sucursal = '".$id_sucursal."' and date like '$fecha_hoy%'";
 $data=$db->query($sql);
 $suma_venta=0;
 foreach ($data as $ventas) {
 	$suma_venta += (double)$ventas['price'];
 }
 //suma de egresos
-$sql="SELECT * FROM egreso where fecha like '$fecha_hoy%'";
+$sql="SELECT * FROM egreso where sucursal_id = '".$id_sucursal."' and fecha like '$fecha_hoy%'";
 $data=$db->query($sql);
 $suma_egreso=0;
 foreach ($data as $egreso) {
@@ -76,7 +77,7 @@ $neto=$suma+$suma_venta-$suma_egreso;
                         </thead>
                         <tbody>
                         	<?php
-                        	$sql="select u.name,c.nombre_cliente,p.id_correlativo_registro,r.descrip,r.falla,r.status,p.pagado,p.fecha_pago from registro as r INNER JOIN pagos_registro as p ON r.correlativo=p.id_correlativo_registro INNER JOIN users as u ON p.id_vendedor=u.id INNER JOIN cliente as c ON r.id_cliente_registro=c.id_cliente where p.fecha_pago like'$fecha_hoy%' ORDER BY p.id_correlativo_registro";
+                        	$sql="select u.name,c.nombre_cliente,p.id_correlativo_registro,r.descrip,r.falla,r.status,p.pagado,p.fecha_pago from registro as r INNER JOIN pagos_registro as p ON r.correlativo=p.id_correlativo_registro INNER JOIN users as u ON p.id_vendedor=u.id INNER JOIN cliente as c ON r.id_cliente_registro=c.id_cliente where p.fecha_pago like'$fecha_hoy%' and p.sucursal_id = ".$id_sucursal." ORDER BY p.id_correlativo_registro";
 
                            if ($query=$db->query($sql) ){
 				while ($row=$db->fetch_array($query)){
@@ -154,7 +155,7 @@ $neto=$suma+$suma_venta-$suma_egreso;
 			</thead>
                         <tbody>
                         	<?php
-                        	$sql="SELECT f.id_factura,f.numero_factura,f.fecha_factura,f.id_vendedor,f.estado_factura,f.total_venta,p.id_sucursal FROM  facturas as f LEFT JOIN users as u ON u.id=f.id_vendedor LEFT JOIN detalle_factura as d ON d.numero_factura=f.numero_factura LEFT JOIN products as p ON p.id=d.id_producto INNER JOIN sales as s ON s.numero_factura=f.numero_factura and p.id_sucursal=s.id_sucursal  WHERE s.date like '$fecha_hoy%' GROUP BY f.id_factura,s.id_sucursal order by f.id_factura desc";
+                        	$sql="SELECT f.id_factura,f.numero_factura,f.fecha_factura,f.id_vendedor,f.estado_factura,f.total_venta,p.id_sucursal FROM  facturas as f LEFT JOIN users as u ON u.id=f.id_vendedor LEFT JOIN detalle_factura as d ON d.numero_factura=f.numero_factura LEFT JOIN products as p ON p.id=d.id_producto INNER JOIN sales as s ON s.numero_factura=f.numero_factura and p.id_sucursal=s.id_sucursal  WHERE s.date like '$fecha_hoy%' and s.id_sucursal = ".$id_sucursal." GROUP BY f.id_factura,s.id_sucursal order by f.id_factura desc";
 
                            if ($query=$db->query($sql) ){
 				while ($row=$db->fetch_array($query)){

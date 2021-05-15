@@ -2,13 +2,13 @@
 	$page_title = 'Editar producto';
 	require_once('includes/load.php');
 	// Checkin What level user has permission to view this page
-	page_require_level(1);
+	page_require_level(2);
 
 	$product = find_by_id('products',(int)$_GET['id']);
 	$all_categories = find_all('categories');
 	$all_photo = find_all('media');
-	$all_providers= find_all('proveedor');
-	$all_sucursal=find_all('sucursales');
+	$all_sucursal=find_all_sucursales_by_user();
+  	$all_providers= find_all_proveedores_by_sucursal();
 
 	if(!$product){
 		$session->msg("d","Missing product id.");

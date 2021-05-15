@@ -2,13 +2,11 @@
   $page_title = 'Agregar producto';
   require_once('includes/load.php');
   // Checkear nivel de permiso para esta pagina
-  page_require_level(1);
+  page_require_level(2);
   $all_categories = find_all('categories');
   $all_sucursales=find_all_sucursales_by_user();
-  $all_providers= find_all('proveedor');
+  $all_providers= find_all_proveedores_by_sucursal();
   $all_photo = find_all('media');
- $products = join_product_table();
-
 ?>
 <head>
   <?php include ("./layouts/header.php");?>

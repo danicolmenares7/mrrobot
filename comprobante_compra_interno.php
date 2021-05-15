@@ -37,7 +37,7 @@ table.page_footer {width: 100%; border: none; background-color: white; padding: 
 </style>
 <?php 
 include("includes/load.php");
-page_require_level(1);
+page_require_level(2);
 
 
 //capturar datos de la sucursal

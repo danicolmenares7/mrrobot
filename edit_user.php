@@ -2,11 +2,17 @@
   $page_title = 'Editar Usuario';
   require_once('includes/load.php');
   // Checkin What level user has permission to view this page
-   page_require_level(1);
+   page_require_level(2);
 
   $e_user = find_by_id('users',(int)$_GET['id']);
-  $groups  = find_all('user_groups');
-  $all_sucursales=find_all('sucursales');
+  $id_sucursal = $_SESSION['id_sucursal'];
+  if($id_sucursal == '4'){
+		$groups = find_all('user_groups');
+		$all_sucursales=find_all('sucursales');
+	}else{
+		$groups = find_groups_by_level();
+		$all_sucursales=find_sucursales_by_level();
+	}
   if(!$e_user){
     $session->msg("d","Missing user id.");
     redirect('users.php');
