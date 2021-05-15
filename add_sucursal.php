@@ -2,7 +2,7 @@
   $page_title = 'Agregar sucursal';
   require_once('includes/load.php');
   // Checkear nivel de permiso para esta pagina
-  page_require_level(0);
+  page_require_level(1);
 $cone= $db->con();
 ?>
 <?php
@@ -12,8 +12,6 @@ $cone= $db->con();
 	 $direccion=remove_junk($db->escape($_POST['sucursal-direccion']));
    $ruc=remove_junk($db->escape($_POST['sucursal-ruc']));
    $celular=remove_junk($db->escape($_POST['sucursal-celular']));
-   $email = remove_junk($db->escape($_POST['sucursal-email']));
-   $wsp = remove_junk($db->escape($_POST['sucursal-wsp']));
    $imagen="no-image";
 
    
@@ -21,9 +19,9 @@ $cone= $db->con();
 	 
      $date    = make_date();
      $query  = "INSERT INTO sucursales (";
-     $query .=" direccion_sucursal,nombre_sucursal,telefono_sucursal,RUC_SUCURSAL,image_path,email_sucursal,wsp_sucursal";
+     $query .=" direccion_sucursal,nombre_sucursal,telefono_sucursal,RUC_SUCURSAL,image_path";
      $query .=") VALUES (";
-     $query .=" '{$direccion}','{$nombre}','{$celular}','{$ruc}','{$imagen}','{$email}','{$wsp}'";
+     $query .=" '{$direccion}','{$nombre}','{$celular}','{$ruc}','{$imagen}'";
      $query .=")";
 	  
 	  
@@ -109,7 +107,7 @@ $cone= $db->con();
                   <input type="text" class="form-control" name="sucursal-celular" placeholder="Celular" required>
                </div>
               </div>
-               <div class="form-group">
+               <!-- <div class="form-group">
                 <div class="input-group">
                   <span class="input-group-addon">
                    <i class="glyphicon glyphicon-th-large"></i>
@@ -125,7 +123,7 @@ $cone= $db->con();
                   <input type="text" class="form-control" name="sucursal-wsp" placeholder="WhatsApp" required>
                </div>
               </div>
-                
+                 -->
              
               <div class="form-group" >
                 <div class="input-group">
