@@ -799,4 +799,66 @@ function find_all_sucursales_by_user(){
     return $registros;
 
   }
+
+  function clientesBySucursal(){
+    global $db;
+    $id_sucursal=$_SESSION['id_sucursal'];
+    $sql = "SELECT * FROM cliente WHERE sucursal_id ={$id_sucursal}";
+    $registros = find_by_sql($sql);
+    return $registros;
+
+  }
+
+  function find_cliente_by_id($table,$id){
+    global $db;
+    $id_sucursal=$_SESSION['id_sucursal'];
+    $id = (int)$id;
+    if(tableExists($table)){
+          $sql = $db->query("SELECT * FROM {$db->escape($table)} WHERE id_cliente='{$db->escape($id)}' AND sucursal_id='{$id_sucursal}'");
+          if($result = $db->fetch_assoc($sql))
+            return $result;
+          else
+            return [];
+    }
+  }
+
+	function find_users_by_sucursal(){
+		global $db;
+		$id_sucursal=$_SESSION['id_sucursal'];
+		$results = array();
+		$sql = "SELECT u.id,u.name,u.username,u.user_level,u.status,u.last_login,";
+		$sql .="g.group_name ";
+		$sql .="FROM users u ";
+		$sql .="LEFT JOIN user_groups g ";
+		$sql .="ON g.group_level=u.user_level WHERE id_sucursal = {$id_sucursal} ORDER BY u.name ASC";
+		$result = find_by_sql($sql);
+		return $result;
+	}
+
+	function find_groups_by_level(){
+		global $db;
+		$id_sucursal=$_SESSION['id_sucursal'];
+		$sql = "SELECT * from user_groups where group_level != 1";
+		$result = find_by_sql($sql);
+		return $result;
+	}
+
+	function find_sucursales_by_level(){
+		global $db;
+		$id_sucursal=$_SESSION['id_sucursal'];
+		$sql = "SELECT * from sucursales where id = {$id_sucursal}";
+		$result = find_by_sql($sql);
+		return $result;
+  }
+
+  function find_all_proveedores_by_sucursal(){
+		global $db;
+		$id_sucursal=$_SESSION['id_sucursal'];
+		$sql = "SELECT * from proveedor where sucursal_id = {$id_sucursal}";
+		$result = find_by_sql($sql);
+		return $result;
+  }
+  
+  find_all_proveedores_by_sucursal
+
 ?>

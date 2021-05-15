@@ -3,7 +3,7 @@
   $page_title = 'Historial de productos';
   require_once('includes/load.php');
   // Checkin What level user has permission to view this page
-   page_require_level(1);
+   page_require_level(2);
 $id_producto=$_GET['id'];
 if(!(isset($_GET['id']) && is_numeric($_GET['id']))){
 	redirect('product.php',false);

@@ -1,12 +1,16 @@
 <?php
-  $page_title = 'Lista de usuarios';
-  require_once('includes/load.php');
-?>
-<?php
-// Checkin What level user has permission to view this page
- page_require_level(1);
-//pull out all user form database
- $all_users = find_all_user();
+	$page_title = 'Lista de usuarios';
+	require_once('includes/load.php');
+	// Checkin What level user has permission to view this page
+	page_require_level(2);
+		//pull out all user form database
+	$id_sucursal=$_SESSION['id_sucursal'];
+	if($id_sucursal == '4'){
+		$all_users = find_all_user();
+	}else{
+		$all_users = find_users_by_sucursal();
+	}
+	
 ?>
 <head>
   <?php include ("./layouts/header.php");?>

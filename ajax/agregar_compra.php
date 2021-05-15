@@ -3,7 +3,7 @@
 require_once('../includes/load.php');
 include('../layouts/header.php');
   // Checkin What level user has permission to view this page
-   page_require_level(1);
+   page_require_level(2);
  $products = find_all('products'); 
 $categorias=find_all('categories');
 $session_id=$_SESSION['user_id'];

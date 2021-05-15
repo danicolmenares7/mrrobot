@@ -1,10 +1,17 @@
 <?php
-  $page_title = 'Agregar usuarios';
-  require_once('includes/load.php');
-  // Checkin What level user has permission to view this page
-  page_require_level(1);
-  $groups = find_all('user_groups');
-  $all_sucursales=find_all('sucursales');
+	$page_title = 'Agregar usuarios';
+	require_once('includes/load.php');
+	// Checkin What level user has permission to view this page
+	page_require_level(2);
+	$id_sucursal = $_SESSION['id_sucursal'];
+	if($id_sucursal == '4'){
+		$groups = find_all('user_groups');
+		$all_sucursales=find_all('sucursales');
+	}else{
+		$groups = find_groups_by_level();
+		$all_sucursales=find_sucursales_by_level();
+	}
+	
 ?>
 <?php
   if(isset($_POST['add_user'])){
@@ -73,7 +80,7 @@
             </div>
             <div class="form-group">
                 <label for="password">Contraseña</label>
-                <input type="password" class="form-control" name ="password"  placeholder="Contraseña">
+                <input type="password" class="form-control" style="color:black" name ="password"  placeholder="Contraseña">
             </div>
 			<div class="form-group">
 				<label for="sucursal">Sucursal</label>

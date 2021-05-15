@@ -1,59 +1,54 @@
 <?php
-  $page_title = 'Editar datos del cliente';
-  require_once('includes/load.php');
+	$page_title = 'Editar datos del cliente';
+	require_once('includes/load.php');
 
-  // Checkin What level user has permission to view this page
-  page_require_level(1);
- // $all_providers = find_all('proveedores');
-  //$all_photo = find_all('media');
-$client = find_by_id2('cliente',(int)$_GET['id']);
-//if(!$provider){
- // $session->msg("d","Missing provider id.");
-//  redirect('proveedores.php');	 
+	// Checkin What level user has permission to view this page
+	page_require_level(2);
 
-?>
-<?php
-
-?>
-<?php
- if(isset($_POST['edit_client'])){
-  // $req_fields = array('empresa_title','telefono_title','contacto_title','tipo_producto' );
-  // validate_fields($req_fields);
-
-
-   if(empty($errors)){
-     $p_name  = remove_junk($db->escape($_POST['cliente_title']));
-     $p_telef  = remove_junk($db->escape($_POST['telefono_title']));
-     $p_email   = remove_junk($db->escape($_POST['email_title']));
-     $p_dir  = remove_junk($db->escape($_POST['dir_cliente']));
-	 $p_id  = remove_junk($db->escape($_POST['id_cliente']));
-   $dni_cliente  = remove_junk($db->escape($_POST['dni_cliente']));
-   $pedidos_cliente  = remove_junk($db->escape($_POST['pedidos_cliente']));
-   $grupo_cliente  = remove_junk($db->escape($_POST['grupo_cliente']));
-	   $query   = "UPDATE cliente SET";
-       $query  .=" nombre_cliente ='{$p_name}', telefono_cliente ='{$p_telef}',";
-       $query  .=" email_cliente ='{$p_email}', direccion_cliente ='{$p_dir}', dni_cliente ='{$dni_cliente}',";
-       $query  .=" grupo_cliente ='{$grupo_cliente}' , pedidos_cliente ='{$pedidos_cliente}'";
-       $query  .=" WHERE id_cliente ='{$p_id}'";
-	   
-     //$query .=" ON DUPLICATE KEY UPDATE name='{$p_name}'";
-	  
-     $result = $db->query($query);
-               if($result && $db->affected_rows() === 1){
-                 $session->msg('s',"CLiente ha sido actualizado. ");
-                 redirect('cliente.php', false);
-               } else {
-                 $session->msg('d',' Lo siento, actualización falló.');
-                 redirect('edit_client.php?id='.$product['id'], false);
-               }
-
-   } else{
-       $session->msg("d", $errors);
-       redirect('edit_client.php?id='.$product['id'], false);
-   }
-
-
- }
+ 	if(isset($_POST['edit_client'])){
+		// $req_fields = array('empresa_title','telefono_title','contacto_title','tipo_producto' );
+		// validate_fields($req_fields);
+		if(empty($errors)){
+			$p_name  = remove_junk($db->escape($_POST['cliente_title']));
+			$p_telef  = remove_junk($db->escape($_POST['telefono_title']));
+			$p_email   = remove_junk($db->escape($_POST['email_title']));
+			$p_dir  = remove_junk($db->escape($_POST['dir_cliente']));
+			$p_id  = remove_junk($db->escape($_POST['id_cliente']));
+			$dni_cliente  = remove_junk($db->escape($_POST['dni_cliente']));
+			$pedidos_cliente  = remove_junk($db->escape($_POST['pedidos_cliente']));
+			$grupo_cliente  = remove_junk($db->escape($_POST['grupo_cliente']));
+			$query   = "UPDATE cliente SET";
+			$query  .=" nombre_cliente ='{$p_name}', telefono_cliente ='{$p_telef}',";
+			$query  .=" email_cliente ='{$p_email}', direccion_cliente ='{$p_dir}', dni_cliente ='{$dni_cliente}',";
+			$query  .=" grupo_cliente ='{$grupo_cliente}' , pedidos_cliente ='{$pedidos_cliente}'";
+			$query  .=" WHERE id_cliente ='{$p_id}'";
+			
+			//$query .=" ON DUPLICATE KEY UPDATE name='{$p_name}'";
+			
+			$result = $db->query($query);
+			if($result && $db->affected_rows() === 1){
+				$session->msg('s',"CLiente ha sido actualizado. ");
+				redirect('cliente.php', false);
+			} else {
+				$session->msg('d',' Lo siento, actualización falló.');
+				redirect('edit_client.php?id='.$product['id'], false);
+			}
+		} else{
+			$session->msg("d", $errors);
+			redirect('edit_client.php?id='.$product['id'], false);
+		}
+	}else{
+		if(!isset($_GET['id'])){
+			$session->msg("d", 'Debe elegir un cliente para editar');
+			   redirect('cliente.php', false);
+		}
+		$client = find_cliente_by_id('cliente',(int)$_GET['id']);
+	
+		if(empty($client)){
+			$session->msg("d", 'El cliente no existe');
+			   redirect('cliente.php', false);
+		}
+	}
 
 ?>
 <head>

@@ -4,12 +4,13 @@ if (isset($_GET['q'])){
 
 //include("../../config/conexion.php");
 $return_arr = array();
+$id_sucursal=$_SESSION['id_sucursal'];
 /* If connection to database, run sql statement. */
 	
 if ($db->con())
 {
 	
-	$fetch = $db->query("SELECT * FROM cliente where nombre_cliente like '%" . $db->escape(($_GET['q'])) . "%' LIMIT 0 ,50"); 
+	$fetch = $db->query("SELECT * FROM cliente WHERE sucursal_id=".$id_sucursal." AND nombre_cliente like '%" . $db->escape(($_GET['q'])) . "%' LIMIT 0 ,50"); 
 	
 	/* Retrieve and store in array the results of the query.*/
 	while ($row =$db->fetch_array($fetch)) {
